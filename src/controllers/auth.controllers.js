@@ -142,7 +142,7 @@ const registeredUser = async (req, res) => {
         console.error(err);
 
         return res.status(500).json({
-            message: err.message
+            message: "server error"
         });
     }
 };
