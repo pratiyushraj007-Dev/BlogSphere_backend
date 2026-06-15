@@ -157,7 +157,12 @@ const loginUser = async (req, res) => {
 
 
 const logout = async (req, res) => {
-    res.clearCookie("BlogSphere");
+    res.clearCookie("BlogSphere", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None"
+});
+
     res.status(200).json({
         message: "logout"
     })
