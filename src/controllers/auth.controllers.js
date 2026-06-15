@@ -258,7 +258,7 @@ const confirmEmail = async (req, res) => {
                 await user.save();
 
                 //4 send token
-                const resentLink = `http://localhost:5173/reset-password/${emailValue}-${token}`;
+                const resentLink = `https://blogspherebackend-production.up.railway.app/reset-password/${emailValue}-${token}`;
                 await transporter.sendMail({
                     from: process.env.HOST_EMAIL,
                     to: emailValue,
