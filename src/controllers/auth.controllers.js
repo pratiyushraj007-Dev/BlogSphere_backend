@@ -74,7 +74,8 @@ const validatedUser = async (req, res) => {
     })
     res.cookie("tempToken", token, {
         maxAge: 5 * 60 * 1000, // 5 minutes
-        httpOnly: true
+        httpOnly: true,
+        sameSite: "None"
     });
     res.status(200).json({
         message: "Verified",
@@ -133,7 +134,8 @@ const loginUser = async (req, res) => {
             }, process.env.JWT_SECRET)
             res.cookie("BlogSphere", BlogSphere, {
                 maxAge: 7 * 24 * 60 * 60 * 1000,//7day
-                httpOnly: true
+                httpOnly: true,
+                sameSite: "None"
             })
             return res.status(400).json({
                 message: "success",
