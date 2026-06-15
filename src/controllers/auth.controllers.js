@@ -30,7 +30,7 @@ const validatedUser = async (req, res) => {
             message: "Password and Confirm Password should be same"
         })
     }
-    const isUserExist = await userModel.findOne({ userName });
+    const isUserExist = await userModel.findOne({ userEmail });
     if (isUserExist) {
         return res.status(400).json({
             message: "User already Exist please login to continue"
@@ -100,28 +100,52 @@ const restrictedOtpPage = (req, res) => {
 }
 
 const registeredUser = async (req, res) => {
-    const { otp } = req.body;
-    const tempToken = req.cookies.tempToken;
-    const decoded = jwt.verify(tempToken, process.env.JWT_SECRET);
-    console.log(decoded)
-    const otpVerification = await bcrypt.compare(otp, decoded.otp); //bcrypt.compare(plainText, hashedText)
-    if (otpVerification) {
-        await userModel.create({
-            userName: decoded.userName,
-            userEmail: decoded.userEmail,
-            userPassword: decoded.userPassword,
-            userDesc: decoded.userDesc,
-            userProfile: decoded.userProfile
-        })
-        return res.status(200).json({
-            message: "You are registered"
-        })
-    } else {
+    try {
+        const { otp } = req.body;
+        const tempToken = req.cookies.tempToken;
+
+        if (!tempToken) {
+            return res.status(401).json({
+                message: "tempToken not found"
+            });
+        }
+
+        const decoded = jwt.verify(
+            tempToken,
+            process.env.JWT_SECRET
+        );
+
+        const otpVerification = await bcrypt.compare(
+            otp,
+            decoded.otp
+        );
+
+        if (otpVerification) {
+            await userModel.create({
+                userName: decoded.userName,
+                userEmail: decoded.userEmail,
+                userPassword: decoded.userPassword,
+                userDesc: decoded.userDesc,
+                userProfile: decoded.userProfile
+            });
+
+            return res.status(200).json({
+                message: "You are registered"
+            });
+        }
+
         return res.status(400).json({
             message: "INVALID OTP"
-        })
+        });
+
+    } catch (err) {
+        console.error(err);
+
+        return res.status(500).json({
+            message: err.message
+        });
     }
-}
+};
 
 const loginUser = async (req, res) => {
     const { userEmail, userPassword } = req.body;
