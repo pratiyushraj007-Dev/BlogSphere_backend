@@ -18,7 +18,6 @@ const userLoginModel=new mongoose.Schema({
     },
     userPassword:{
         type:String,
-        required:true
     },
     userDesc:{
         type:String,
