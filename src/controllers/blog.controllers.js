@@ -91,9 +91,8 @@ const tiptapImage = async (req, res) => {
 }
 
 const seeBlogs = async (req, res) => {
-    const BlogSphereToken = req.cookies.BlogSphere;
     const blogArray = [];
-    if (BlogSphereToken) {
+    try {
         const blogs = await blogModel.find().sort({ createdAt: -1 })
         for (const blog of blogs) {
             blogArray.push({
@@ -108,9 +107,9 @@ const seeBlogs = async (req, res) => {
             message: "success",
             blogArray: blogArray
         })
-    } else {
+    } catch (error) {
         return res.status(400).json({
-            message: "login first"
+            message:"server error"
         })
     }
 }
@@ -184,7 +183,6 @@ const toBookMark = async (req, res) => {
         author,
         blog_id
     }
-    console.log(Bookmark);
     if (BlogSphereToken) {
         try {
             const decoded = await jwt.verify(BlogSphereToken, process.env.JWT_SECRET);
@@ -209,6 +207,10 @@ const toBookMark = async (req, res) => {
             })
         }
 
+    }else{
+        return res.status(200).messgae({
+            message:"Login to get bookmark access"
+        })
     }
     res.status(400).json({
         messgae: "Error"
