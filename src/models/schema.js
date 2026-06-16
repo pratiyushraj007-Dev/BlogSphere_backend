@@ -17,7 +17,7 @@ const userLoginModel=new mongoose.Schema({
         trim: true
     },
     userPassword:{
-        type:String,
+        type:String
     },
     userDesc:{
         type:String,

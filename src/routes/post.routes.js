@@ -61,7 +61,7 @@ router.get("/google/callback", async (req, res) => {
     }
     )
     const googleUser = await userRes.json();
-    const user = await userModel.findOne({ userEmail: googleUser.email });
+    let user = await userModel.findOne({ userEmail: googleUser.email });
     if (!user) {
         user = await userModel.create({
             userName: googleUser.name,
