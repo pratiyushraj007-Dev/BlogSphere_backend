@@ -109,7 +109,7 @@ const seeBlogs = async (req, res) => {
         })
     } catch (error) {
         return res.status(400).json({
-            message:"server error"
+            message: "server error"
         })
     }
 }
@@ -175,15 +175,15 @@ const bookMarked = async (req, res) => {
 }
 
 const toBookMark = async (req, res) => {
-    const { title, summary, author, blog_id } = req.body;
     const BlogSphereToken = req.cookies.BlogSphere;
-    const Bookmark = {
-        title,
-        summary,
-        author,
-        blog_id
-    }
     if (BlogSphereToken) {
+        const { title, summary, author, blog_id } = req.body;
+        const Bookmark = {
+            title,
+            summary,
+            author,
+            blog_id
+        }
         try {
             const decoded = await jwt.verify(BlogSphereToken, process.env.JWT_SECRET);
             const user = await userModel.findOne({ userEmail: decoded.userEmail });
@@ -207,9 +207,9 @@ const toBookMark = async (req, res) => {
             })
         }
 
-    }else{
+    } else {
         return res.status(200).messgae({
-            message:"Login to get bookmark access"
+            message: "Login to get bookmark access"
         })
     }
     res.status(400).json({
