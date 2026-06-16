@@ -3,6 +3,7 @@ const authControllers=require("../controllers/auth.controllers");
 const blogControllers=require("../controllers/blog.controllers");
 const upload=require("../config/multerConfig");
 const userModel=require("../models/schema");
+const jwt=require("jsonwebtoken");
 const { Google, generateCodeVerifier, generateState } = require("arctic");
 
 const router =express.Router();
