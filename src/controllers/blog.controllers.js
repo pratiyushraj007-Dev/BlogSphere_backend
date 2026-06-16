@@ -208,7 +208,7 @@ const toBookMark = async (req, res) => {
         }
 
     } else {
-        return res.status(200).message({
+        return res.status(200).json({
             message: "Login to get bookmark access"
         })
     }
