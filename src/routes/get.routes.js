@@ -55,18 +55,19 @@ router.get("/google/callback", async (req, res) => {
     }
     )
     const googleUser = await userRes.json();
-    let user = await userModel.findOne({ email: googleUser.email });
+    const user = await userModel.findOne({ userEmail: googleUser.email });
     if (!user) {
         user = await userModel.create({
-            username: googleUser.name,
-            email: googleUser.email,
+            userName: googleUser.name,
+            userProfile:googleUser.picture,
+            userEmail: googleUser.email,
             provider: "google",
             googleId: googleUser.id
         })
     }
     const BlogSphere = await jwt.sign({
-        username: user.username,
-        email: user.email
+        userEmail: user.userEmail,
+        userID: user._id,
     }, process.env.JWT_SECRET);
     res.clearCookie("code_verifier", {
         secure: true,
